@@ -4,11 +4,10 @@
   "version": "0.22.0-experimental",
   "implementation": "V22",
   "dev_fee_percent": 0,
-  "compute_elf_sha256": "7e1686443e93297a45b893995d2979b2254f099564b2c10ef91520fe282d8154",
-  "architecture": "Linux x86_64 / NVIDIA SM89",
+  "compute_elf_sha256": "815cfef70a0a1ee2840d4e6122b554d92eae0c6ce1bea093312b9b5b9c19e990",
+  "architecture": "Linux x86_64 / SM75,86,89 native + PTX JIT",
   "physically_tested_gpus": [
-    "RTX 4080",
-    "RTX 4070 Ti SUPER"
+    "RTX 5070 (7 cards; driver 595.91.07; PTX JIT)"
   ],
   "source_distribution": "not included",
   "environment": {
@@ -33,5 +32,15 @@
     "PRL_INCREMENTAL_A_TEST": "0",
     "PRL_SCHED_PERF": "0"
   },
-  "hardware_settings_modified_by_package": false
+  "hardware_settings_modified_by_package": false,
+  "hiveos_custom_name": "nacreon-0.22.0",
+  "packaging_revision": "2026-10-08-hivefix",
+  "validation": {
+    "exact_gpu_cpu": "PASS all 7",
+    "mock_proof": "PASS",
+    "online_seconds": 300,
+    "accepted": 9,
+    "rejected": 0,
+    "verified": 9
+  }
 }
