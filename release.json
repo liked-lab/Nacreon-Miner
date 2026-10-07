@@ -1,0 +1,37 @@
+{
+  "name": "Nacreon Miner",
+  "developer": "liked",
+  "version": "0.22.0-experimental",
+  "implementation": "V22",
+  "dev_fee_percent": 0,
+  "compute_elf_sha256": "7e1686443e93297a45b893995d2979b2254f099564b2c10ef91520fe282d8154",
+  "architecture": "Linux x86_64 / NVIDIA SM89",
+  "physically_tested_gpus": [
+    "RTX 4080",
+    "RTX 4070 Ti SUPER"
+  ],
+  "source_distribution": "not included",
+  "environment": {
+    "PRL_DIRECT_REGISTERS": "1",
+    "PRL_DIRECT_STRATEGY": "3",
+    "PRL_FUSED_DIRECT_PREP": "2",
+    "PRL_DIRECT_STRASSEN": "0",
+    "PRL_STRASSEN_PREPACK": "0",
+    "PRL_BINARY_A": "0",
+    "PRL_DIRECT_COOPERATIVE": "0",
+    "PRL_DIRECT_PREFETCH": "0",
+    "PRL_DIRECT_L2": "0",
+    "PRL_DIRECT_PROOF_PIPELINE": "0",
+    "PRL_PIPELINE_CHECK_RING": "0",
+    "PRL_DIRECT_CTA_SPLIT": "1",
+    "PRL_DIRECT_K32_UNROLL": "2",
+    "PRL_PERF_TRACE": "0",
+    "PRL_COOPERATIVE_LATE_FOLD": "0",
+    "PRL_FULL_SWEEP_PROFILE": "0",
+    "PRL_DIRECT_BALANCED_XOR": "1",
+    "PRL_INCREMENTAL_A": "1",
+    "PRL_INCREMENTAL_A_TEST": "0",
+    "PRL_SCHED_PERF": "0"
+  },
+  "hardware_settings_modified_by_package": false
+}

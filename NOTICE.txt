@@ -1,0 +1,8 @@
+Nacreon Miner V22 — developed by liked.
+
+Based on CPPminer by foolzhz (MIT), upstream commit
+6785ad349a33f7bebb3ffe1dc1ad876b56d66ef8.
+Original notices and third-party licenses are retained.
+Distribution contains executable binaries and integration scripts only.
+No source code for liked's modifications is published in this release.
+
