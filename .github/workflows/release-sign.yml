@@ -115,7 +115,9 @@ jobs:
               require(name not in expected, 'Archive names must differ')
               expected[name] = digest.lower()
 
-          release_url = API + '/releases/tags/' + quote(tag, safe='')
+          matches = [r for r in request(API + '/releases?per_page=100') if r['tag_name'] == tag]
+          require(len(matches) == 1, 'Expected exactly one release with the requested tag')
+          release_url = API + '/releases/' + str(matches[0]['id'])
           release = request(release_url)
           require(release['tag_name'] == tag, 'Release tag mismatch')
           require(not release.get('immutable', False), 'Release is immutable; sign before locking it')
