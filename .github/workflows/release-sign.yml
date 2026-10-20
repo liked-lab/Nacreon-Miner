@@ -9,7 +9,7 @@ on:
         type: string
       linux_file:
         description: Linux archive asset name
-        default: nacreon-0.23.0-protocol47-linux-x86_64.tar.gz
+        default: Nacreon_linux-0.23.0.tar.gz
         required: true
         type: string
       linux_sha256:
@@ -18,7 +18,7 @@ on:
         type: string
       hive_file:
         description: HiveOS archive asset name
-        default: nacreon-0.23.0.tar.gz
+        default: Nacreon_hiveos_custom-0.23.0.tar.gz
         required: true
         type: string
       hive_sha256:
@@ -109,7 +109,7 @@ jobs:
           expected = {}
           for role in ('LINUX', 'HIVE'):
               name, digest = os.environ[role + '_FILE'], os.environ[role + '_SHA256']
-              require(re.fullmatch(r'nacreon-[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz', name)
+              require(re.fullmatch(r'(?:nacreon-|Nacreon_(?:linux|hiveos_custom)-)[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz', name)
                       and '..' not in name, 'Unsafe archive name')
               require(re.fullmatch(r'[0-9a-fA-F]{64}', digest), 'Invalid approved SHA-256')
               require(name not in expected, 'Archive names must differ')
@@ -158,7 +158,7 @@ jobs:
                   for line in sums.decode('ascii').splitlines():
                       if not line or line.startswith('#'):
                           continue
-                      match = re.fullmatch(r'([0-9a-fA-F]{64}) [ *](nacreon-[A-Za-z0-9._-]+\.tar\.gz)', line)
+                      match = re.fullmatch(r'([0-9a-fA-F]{64}) [ *]((?:nacreon-|Nacreon_(?:linux|hiveos_custom)-)[A-Za-z0-9._-]+\.tar\.gz)', line)
                       require(match is not None, 'Invalid SHA256SUMS entry')
                       digest, name = match.groups()
                       require(name not in parsed, 'Duplicate SHA256SUMS entry')

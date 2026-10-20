@@ -13,7 +13,7 @@ from the same official release. In Bash, set `file` to the downloaded archive:
 
 ```bash
 set -euo pipefail
-file='nacreon-0.23.0.tar.gz'
+file='Nacreon_hiveos_custom-0.23.0.tar.gz'
 identity='https://github.com/liked-lab/Nacreon-Miner/.github/workflows/release-sign.yml@refs/heads/main'
 issuer='https://token.actions.githubusercontent.com'
 cosign verify-blob --bundle SHA256SUMS.sigstore.json \
