@@ -46,7 +46,7 @@ cd nacreon
 
 | Поле | Значение |
 |---|---|
-| Miner name | `nacreon` |
+| Miner name | `Nacreon_hiveos_custom` |
 | Installation URL | Ссылка на `Nacreon_hiveos_custom-0.23.0.tar.gz` из официального релиза |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
