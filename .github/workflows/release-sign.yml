@@ -65,6 +65,8 @@ jobs:
           import re
           import subprocess
           import tempfile
+          import tarfile
+          import select
           from urllib.parse import quote
           from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -167,6 +169,54 @@ jobs:
                       parsed[name] = digest.lower()
                   require(parsed == expected, 'Existing SHA256SUMS differs from approved archives')
               Path('SHA256SUMS').write_bytes(sums)
+              # CPU-only regression: the packaged miner is never executed.
+              with tarfile.open(os.environ['HIVE_FILE']) as archive:
+                  members = {member.name: member for member in archive.getmembers()}
+                  readers = [name for name in members if name.endswith('/console-filter.py')]
+                  if readers:
+                      require(len(readers) == 1, 'Ambiguous Hive console reader')
+                      root = readers[0].rsplit('/', 1)[0]
+                      fixture = Path('hive-launch-check')
+                      fixture.mkdir()
+                      for name in ('h-run.sh', 'h-manifest.conf', 'console-filter.py'):
+                          (fixture / name).write_bytes(archive.extractfile(root + '/' + name).read())
+                      subprocess.run(['bash', '-n', str(fixture / 'h-run.sh')], check=True)
+                      fake = '#!/usr/bin/env python3\nimport os,sys,time\nprint("NATIVE_PID="+str(os.getpid()),flush=True)\nprint(\'{"type":"native-devfee-work","developer_ready":true}\',flush=True)\nprint("[pool] TEST accepted",flush=True)\nprint("[CUDA] TEST error preserved",file=sys.stderr,flush=True)\nif os.environ.get("FIXTURE_WAIT")=="1":\n while True: time.sleep(1)\nsys.exit(23)\n'
+                      (fixture / 'nacreon').write_text(fake)
+                      (fixture / 'nacreon').chmod(0o755)
+                      for raw in ('0', '1'):
+                          env = dict(os.environ, NACREON_RAW_CONSOLE=raw, FIXTURE_WAIT='0')
+                          process = subprocess.Popen(['bash', 'h-run.sh'], cwd=fixture, env=env,
+                                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                          try:
+                              output, _ = process.communicate(timeout=10)
+                              require(process.returncode == 23, 'Hive launcher changed native exit status')
+                              require(('NATIVE_PID=' + str(process.pid)).encode() in output,
+                                      'Hive launcher did not preserve native PID')
+                              require(b'[pool] TEST accepted' in output and b'[CUDA] TEST error preserved' in output,
+                                      'Hive console reader lost important output')
+                              require((b'native-devfee-work' in output) == (raw == '1'),
+                                      'Hive raw/filtered output regression')
+                          finally:
+                              if process.poll() is None:
+                                  process.kill()
+                                  process.communicate(timeout=5)
+                      env = dict(os.environ, NACREON_RAW_CONSOLE='0', FIXTURE_WAIT='1')
+                      process = subprocess.Popen(['bash', 'h-run.sh'], cwd=fixture, env=env,
+                                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                      try:
+                          require(bool(select.select([process.stdout], [], [], 10)[0]), 'Native startup timeout')
+                          first = process.stdout.readline()
+                          require(first.strip() == ('NATIVE_PID=' + str(process.pid)).encode(),
+                                  'Native PID changed before signal check')
+                          process.terminate()
+                          process.communicate(timeout=10)
+                          require(process.returncode == -15, 'Native SIGTERM was not preserved')
+                      finally:
+                          if process.poll() is None:
+                              process.kill()
+                              process.communicate(timeout=5)
+                      print('PASS: synthetic Hive launcher PID, exit, SIGTERM, reader EOF and console output')
               unchanged()
               for name in payloads:
                   subprocess.run(['cosign', 'sign-blob', '--yes', '--bundle', name + '.sigstore.json', name], check=True)
