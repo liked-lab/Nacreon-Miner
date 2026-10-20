@@ -1,0 +1,185 @@
+name: Sign release files
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag (for example v0.23.0)
+        required: true
+        type: string
+      linux_file:
+        description: Linux archive asset name
+        default: nacreon-0.23.0-protocol47-linux-x86_64.tar.gz
+        required: true
+        type: string
+      linux_sha256:
+        description: Approved LOCAL Linux archive SHA-256 (not copied from GitHub)
+        required: true
+        type: string
+      hive_file:
+        description: HiveOS archive asset name
+        default: nacreon-0.23.0.tar.gz
+        required: true
+        type: string
+      hive_sha256:
+        description: Approved LOCAL HiveOS archive SHA-256 (not copied from GitHub)
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: release-sign-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  sign:
+    if: github.repository == 'liked-lab/Nacreon-Miner' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # Download release assets and upload signatures; no release creation.
+      id-token: write # Short-lived GitHub OIDC identity for Sigstore.
+    steps:
+      - name: Install verified cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          cosign-release: v3.1.3
+
+      - name: Check, sign, verify and attach signatures
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          LINUX_FILE: ${{ inputs.linux_file }}
+          LINUX_SHA256: ${{ inputs.linux_sha256 }}
+          HIVE_FILE: ${{ inputs.hive_file }}
+          HIVE_SHA256: ${{ inputs.hive_sha256 }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+          from urllib.parse import quote
+          from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+          REPO = 'liked-lab/Nacreon-Miner'
+          API = f'https://api.github.com/repos/{REPO}'
+          IDENTITY = f'https://github.com/{REPO}/.github/workflows/release-sign.yml@refs/heads/main'
+          ISSUER = 'https://token.actions.githubusercontent.com'
+          LIMIT = 512 * 1024 * 1024
+
+          def require(condition, message):
+              if not condition:
+                  raise RuntimeError(message)
+
+          # GitHub redirects asset downloads to a signed storage URL. Never forward the token.
+          class SafeRedirect(HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  require(newurl.startswith('https://'), 'Refusing non-HTTPS redirect')
+                  redirected = super().redirect_request(req, fp, code, msg, headers, newurl)
+                  if redirected is not None:
+                      redirected.remove_header('Authorization')
+                  return redirected
+
+          opener = build_opener(SafeRedirect())
+
+          def request(url, *, binary=False, data=None):
+              require(url.startswith(API + '/') or
+                      url.startswith(f'https://uploads.github.com/repos/{REPO}/'),
+                      'Unexpected API destination')
+              headers = {'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                         'Accept': 'application/octet-stream' if binary else 'application/vnd.github+json',
+                         'X-GitHub-Api-Version': '2022-11-28'}
+              if data is not None:
+                  headers['Content-Type'] = 'application/octet-stream'
+              with opener.open(Request(url, headers=headers, data=data), timeout=60) as response:
+                  content = response.read(LIMIT + 1)
+              require(len(content) <= LIMIT, 'Asset exceeds 512 MiB limit')
+              return content if binary else json.loads(content)
+
+          tag = os.environ['RELEASE_TAG']
+          require(re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9][A-Za-z0-9.-]*)?', tag),
+                  'Invalid release tag')
+          expected = {}
+          for role in ('LINUX', 'HIVE'):
+              name, digest = os.environ[role + '_FILE'], os.environ[role + '_SHA256']
+              require(re.fullmatch(r'nacreon-[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz', name)
+                      and '..' not in name, 'Unsafe archive name')
+              require(re.fullmatch(r'[0-9a-fA-F]{64}', digest), 'Invalid approved SHA-256')
+              require(name not in expected, 'Archive names must differ')
+              expected[name] = digest.lower()
+
+          release_url = API + '/releases/tags/' + quote(tag, safe='')
+          release = request(release_url)
+          require(release['tag_name'] == tag, 'Release tag mismatch')
+          require(not release.get('immutable', False), 'Release is immutable; sign before locking it')
+          assets = release['assets']
+          require(len({a['name'] for a in assets}) == len(assets), 'Duplicate release asset names')
+          by_name = {a['name']: a for a in assets}
+          payloads = [*expected, 'SHA256SUMS']
+          bundles = [name + '.sigstore.json' for name in payloads]
+          require(not set(bundles).intersection(by_name),
+                  'Signatures already exist; refusing to overwrite (including a partial previous run)')
+          for name in expected:
+              require(name in by_name and by_name[name]['state'] == 'uploaded', 'Missing ready archive: ' + name)
+              require(0 < by_name[name]['size'] <= LIMIT, 'Invalid archive size: ' + name)
+
+          def snapshot(value):
+              selected = sorted((a['name'], a['id'], a['size'], a['updated_at'], a.get('digest'), a['state'])
+                                for a in value['assets'] if a['name'] in payloads)
+              return value['id'], value['tag_name'], value['draft'], selected
+
+          original = snapshot(release)
+          commit_url = API + '/commits/' + quote(tag, safe='')
+          commit = request(commit_url)['sha']
+
+          def unchanged():
+              require(snapshot(request(release_url)) == original, 'Release assets changed during signing')
+              require(request(commit_url)['sha'] == commit, 'Release tag moved during signing')
+
+          with tempfile.TemporaryDirectory() as directory:
+              os.chdir(directory)
+              for name, digest in expected.items():
+                  asset = by_name[name]
+                  content = request(API + '/releases/assets/' + str(asset['id']), binary=True)
+                  require(len(content) == asset['size'], 'Archive size changed: ' + name)
+                  require(hashlib.sha256(content).hexdigest() == digest, 'Approved SHA-256 mismatch: ' + name)
+                  Path(name).write_bytes(content)
+              sums = ''.join(f'{digest}  {name}\n' for name, digest in sorted(expected.items())).encode('ascii')
+              if 'SHA256SUMS' in by_name:
+                  sums = request(API + '/releases/assets/' + str(by_name['SHA256SUMS']['id']), binary=True)
+                  parsed = {}
+                  for line in sums.decode('ascii').splitlines():
+                      if not line or line.startswith('#'):
+                          continue
+                      match = re.fullmatch(r'([0-9a-fA-F]{64}) [ *](nacreon-[A-Za-z0-9._-]+\.tar\.gz)', line)
+                      require(match is not None, 'Invalid SHA256SUMS entry')
+                      digest, name = match.groups()
+                      require(name not in parsed, 'Duplicate SHA256SUMS entry')
+                      parsed[name] = digest.lower()
+                  require(parsed == expected, 'Existing SHA256SUMS differs from approved archives')
+              Path('SHA256SUMS').write_bytes(sums)
+              unchanged()
+              for name in payloads:
+                  subprocess.run(['cosign', 'sign-blob', '--yes', '--bundle', name + '.sigstore.json', name], check=True)
+                  subprocess.run(['cosign', 'verify-blob', '--bundle', name + '.sigstore.json',
+                                  '--certificate-identity', IDENTITY, '--certificate-oidc-issuer', ISSUER, name], check=True)
+              unchanged()
+              outputs = ([] if 'SHA256SUMS' in by_name else ['SHA256SUMS']) + bundles
+              for name in outputs:
+                  request(f'https://uploads.github.com/repos/{REPO}/releases/{release["id"]}/assets?name='
+                          + quote(name, safe=''), data=Path(name).read_bytes())
+              # When newly added, include SHA256SUMS in the final expected snapshot.
+              current = request(release_url)
+              if 'SHA256SUMS' not in by_name:
+                  current['assets'] = [a for a in current['assets'] if a['name'] != 'SHA256SUMS']
+              require(snapshot(current) == original, 'Release assets changed during upload')
+              require(request(commit_url)['sha'] == commit, 'Release tag moved during upload')
+              print('Verified signatures attached to existing release ' + tag + '; publication state unchanged.')
+          PY
