@@ -1,10 +1,10 @@
-# Nacreon Miner 0.23.2 · RTX 50 test
+# Nacreon Miner 0.23.3 · RTX 50 test
 
 Pearl (PRL / PearlHash) · NVIDIA GeForce RTX 50 · Linux / HiveOS
 
 **Developer / Разработчик: liked · DevFee: 0.5% / 0,5%.** Pool fees are separate / Комиссия пула отдельно.
 
-[Русский](#русский) · [English](#english) · [Downloads / Скачать](https://github.com/liked-lab/Nacreon-Miner/releases/tag/v0.23.2)
+[Русский](#русский) · [English](#english) · [Downloads / Скачать](https://github.com/liked-lab/Nacreon-Miner/releases/tag/v0.23.3)
 
 ## Русский
 
@@ -12,10 +12,10 @@ Pearl (PRL / PearlHash) · NVIDIA GeForce RTX 50 · Linux / HiveOS
 
 ### Linux: установка и запуск
 
-Нужны 64-разрядный Linux и совместимый драйвер NVIDIA для RTX 50. Скачайте `Nacreon_linux-0.23.2.tar.gz` из релиза. [Проверка подписи и SHA-256](https://github.com/liked-lab/Nacreon-Miner/blob/main/SIGNATURES.md).
+Нужны 64-разрядный Linux и совместимый драйвер NVIDIA для RTX 50. Скачайте `Nacreon_linux-0.23.3.tar.gz` из релиза. [Проверка подписи и SHA-256](https://github.com/liked-lab/Nacreon-Miner/blob/main/SIGNATURES.md).
 
 ```bash
-tar -xzf Nacreon_linux-0.23.2.tar.gz
+tar -xzf Nacreon_linux-0.23.3.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -97,7 +97,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | `https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.2/Nacreon_hiveos_custom-0.23.2.tar.gz` |
+| Installation URL | `https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.3/Nacreon_hiveos_custom-0.23.3.tar.gz` |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -118,10 +118,10 @@ Test update for RTX 50. Fixes worker naming, regional DevFee failover, connectio
 
 ### Linux: install and run
 
-Requires 64-bit Linux and an NVIDIA driver compatible with RTX 50. Download `Nacreon_linux-0.23.2.tar.gz` from the release. [Verify signatures and SHA-256](https://github.com/liked-lab/Nacreon-Miner/blob/main/SIGNATURES.md).
+Requires 64-bit Linux and an NVIDIA driver compatible with RTX 50. Download `Nacreon_linux-0.23.3.tar.gz` from the release. [Verify signatures and SHA-256](https://github.com/liked-lab/Nacreon-Miner/blob/main/SIGNATURES.md).
 
 ```bash
-tar -xzf Nacreon_linux-0.23.2.tar.gz
+tar -xzf Nacreon_linux-0.23.3.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -203,7 +203,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | `https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.2/Nacreon_hiveos_custom-0.23.2.tar.gz` |
+| Installation URL | `https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.3/Nacreon_hiveos_custom-0.23.3.tar.gz` |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
