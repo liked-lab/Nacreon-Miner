@@ -1,9 +1,9 @@
-# Nacreon 0.23.3-three-family-rc2
+# Nacreon 0.23.4
 
 Pearl (PRL / PearlHash) · NVIDIA RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
 
-Русский: тестовый релиз; текущие ELF проверены на RTX30/40/50, ограничения описаны ниже.
-English: test release; current ELF files received physical RTX30/40/50 checks; scope and limits are listed below.
+Русский: Nacreon 0.23.4. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
+English: Nacreon 0.23.4. Nacreon fee is 0%; pool fees are separate.
 Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
 For a homogeneous CUDA-visible rig the launcher selects SM86/SM89/SM120.
 For a mixed rig set NACREON_GPU_ARCH=sm86|sm89|sm120 and matching --devices.
@@ -23,16 +23,17 @@ No architecture selection logic or console layout has changed.
 
 Источник моделей и архитектур / Model and architecture references: [NVIDIA CUDA GPU list](https://developer.nvidia.com/cuda/gpus), [NVIDIA RTX40 comparison](https://www.nvidia.com/en-gb/geforce/graphics-cards/compare/?section=compare-40). The SUPER mapping follows NVIDIA's Ada architecture classification and the SM89 selector contract.
 
+
 ## Русский
 
-Тестовый релиз Nacreon для RTX30/SM86, RTX40/SM89 и RTX50/SM120. Текущие бинарники прошли короткие GPU-проверки; это не проверка каждого SKU и не длительный soak.
+Nacreon для RTX30/SM86, RTX40/SM89 и RTX50/SM120. Предыдущая версия проверена на этих трёх архитектурах. В 0.23.4 исправлены имя HiveOS-пакета и потеря истории периодов при временно неизвестной скорости GPU. Вычислительные модули сжаты и зашифрованы; после декодирования их исходные байты и SHA256 сохранены. Новый загрузчик и бинарники проходят CPU-проверки; это не новый физический GPU-тест.
 
 ### Linux: установка и запуск
 
-Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, совместимый драйвер NVIDIA RTX 30, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Скачайте Linux-архив из Assets этого релиза и проверьте SHA256SUMS и Sigstore-подпись.
+Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверьте также приложенные к релизу Sigstore-подписи.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.3-three-family-rc2.tar.gz
+tar -xzf Nacreon_linux-0.23.4.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -114,7 +115,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.3-three-family-rc2/Nacreon_hiveos_custom-0.23.3-three-family-rc2.tar.gz |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.4/Nacreon_hiveos_custom-0.23.4.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -131,14 +132,14 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 
 ## English
 
-Nacreon test release for RTX30/SM86, RTX40/SM89 and RTX50/SM120. Current binaries passed short physical mining checks, not every-SKU or long-term stability qualification.
+Nacreon for RTX30/SM86, RTX40/SM89 and RTX50/SM120. The previous release was tested on these three architectures. Version 0.23.4 changes the version identifier; compute-image identity and CPU checks are required before release. This is not a new GPU test.
 
 ### Linux: install and run
 
-Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, a compatible NVIDIA RTX 30 driver, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Download the Linux archive from this release Assets and verify SHA256SUMS and its Sigstore bundle.
+Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. No public signature is claimed for this package.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.3-three-family-rc2.tar.gz
+tar -xzf Nacreon_linux-0.23.4.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -220,7 +221,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.3-three-family-rc2/Nacreon_hiveos_custom-0.23.3-three-family-rc2.tar.gz |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.4/Nacreon_hiveos_custom-0.23.4.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -239,16 +240,10 @@ RU: Запуск самостоятелен. Внешние compute-модули
 
 EN: Standalone runtime. External compute modules are not Nacreon-authored kernels; see COMPUTE_NOTICE.md. GPU tuning is applied only through explicit options.
 
-## Квалификация / Qualification
 
-Текущие бинарники: около500с реального майнинга; RTX30/40/50 —8/6/6 принятых USER-шар без отказов. Полные prepool-проверки fullK/zero/4096 PASS. Возврат штатных майнеров проверен отдельными окнами не менее240с с новыми ACK. RTX30 mining и адресный возврат проверены отдельными фазами. Поздний FAIL лабораторного guard на RTX50 сохранён; последующие независимые проверки возврата и очистки PASS. Это короткая квалификация, не длительный тест стабильности и не гарантия ускорения.
+## Известное ограничение / Known issue
 
-Current binaries received approximately500s physical mining checks:8/6/6 accepted USER shares on RTX30/40/50 without rejected shares, full prepool math checks, and original-miner recovery verification. RTX30 mining and targeted recovery were separate phases. A late RTX50 laboratory guard failure remains disclosed; subsequent independent return and cleanup checks passed. These are short checks, not an every-SKU qualification, long soak or speedup guarantee.
+На семи RTX5070 наблюдались временные GPU-простои с самостоятельным возобновлением. Причина пока не установлена; исправление истории статистики не означает устранения этого простоя. Наблюдение продолжается.
+Temporary compute pauses with automatic recovery were observed on seven RTX5070 cards. The cause remains unresolved; preserving period statistics does not fix the compute pause. Monitoring continues.
 
-Один процесс использует одну архитектуру; для смешанного рига выбирайте архитектуру и соответствующие --devices отдельно. / One process uses one architecture; select matching architecture/devices separately for mixed rigs.
-
-Архивы сохранены побайтно после сборки: пометки private/UNRUN внутри упакованного README отражают этап до GPU-проверок. Актуальные результаты и список моделей приведены здесь и в README репозитория. / Archives remain byte-identical to their qualified builds; private/UNRUN wording inside the packaged README records the pre-GPU build stage. This release page and repository README contain the current qualification status and model list.
-
-USER-only: комиссия Nacreon0%. Комиссия пула отдельная. Короткие тесты не доказывают отсутствие сторонних комиссий во всех возможных режимах. / Nacreon developer fee0%; pool fees are separate. Short tests do not establish absence of every third-party fee in every possible mode.
-
-Проверьте SHA256SUMS и Sigstore-подписи перед установкой. / Verify SHA256SUMS and Sigstore bundles before installation. Required notices remain included.
+Compute modules are compressed and encrypted at rest, with authenticated decoding and exact original SHA256 before loading. The embedded key does not guarantee secrecy against extraction from a running process.
