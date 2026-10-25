@@ -1,39 +1,24 @@
-# Nacreon 0.23.5
+# Nacreon 0.23.6
 
 Pearl (PRL / PearlHash) · NVIDIA RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
 
-Русский: Nacreon 0.23.5. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
-English: Nacreon 0.23.5. Nacreon fee is 0%; pool fees are separate.
+Русский: Nacreon 0.23.6. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
+English: Nacreon 0.23.6. Nacreon fee is 0%; pool fees are separate.
 Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
 For a homogeneous CUDA-visible rig the launcher selects SM86/SM89/SM120.
-Supported GPU series can run together on one rig. Use --devices to limit the selected cards.
-Console layout remains unchanged.
-
-## Поддерживаемые модели / Supported models
-
-Комиссия Nacreon / Nacreon developer fee: **0%**. Комиссия пула определяется пулом / Pool fees are separate.
-
-| Архитектура / Architecture | GeForce RTX — совместимость по архитектуре / architecture compatibility |
-|---|---|
-| RTX30 / SM86 (CUDA8.6) | RTX3050,3060,3060Ti,3070,3070Ti,3080,3080Ti,3090,3090Ti |
-| RTX40 / SM89 (CUDA8.9) | RTX4060,4060Ti,4070,4070SUPER,4070Ti,4070TiSUPER,4080,4080SUPER,4090 |
-| RTX50 / SM120 (CUDA12.0) | RTX5050,5060,5060Ti,5070,5070Ti,5080,5090 |
-
-Это совместимость сборки по CUDA-архитектуре, а не физический тест каждого SKU. Физически проверены пять RTX3070/RTX3070Ti, одна RTX4070Ti и две RTX5070. / Architecture compatibility is distinct from physical qualification of every SKU: five RTX3070/RTX3070Ti cards, one RTX4070Ti and two RTX5070 were physically tested.
-
-Источник моделей и архитектур / Model and architecture references: [NVIDIA CUDA GPU list](https://developer.nvidia.com/cuda/gpus), [NVIDIA RTX40 comparison](https://www.nvidia.com/en-gb/geforce/graphics-cards/compare/?section=compare-40). The SUPER mapping follows NVIDIA's Ada architecture classification and the SM89 selector contract.
-
+Mixed supported architectures are grouped automatically. Use --devices to limit GPUs; NACREON_GPU_ARCH selects a single architecture.
+Mixed architecture selection is fixed; console layout is unchanged.
 
 ## Русский
 
-Nacreon для RTX30, RTX40 и RTX50. Исправлена проблема запуска майнера на ригах с видеокартами разных моделей и поколений. Поддерживаемые карты разных серий могут работать вместе на одном риге.
+Nacreon для RTX30, RTX40 и RTX50. В этой версии добавлена совместная работа поддерживаемых карт разных серий на одном риге. Инструкции запуска и настройки приведены ниже.
 
 ### Linux: установка и запуск
 
 Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверьте также приложенные к релизу Sigstore-подписи.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.5.tar.gz
+tar -xzf Nacreon_linux-0.23.6.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -117,7 +102,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.5/Nacreon_hiveos_custom-0.23.5.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.6/Nacreon_hiveos_custom-0.23.6.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -134,14 +119,14 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 
 ## English
 
-Nacreon for RTX30, RTX40 and RTX50. Fixed startup on rigs using supported GPUs from different models and generations together.
+Nacreon for RTX30, RTX40 and RTX50. Supported cards from different series can run together on one rig. See the installation and tuning instructions below.
 
 ### Linux: install and run
 
-Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. Verify the Sigstore signatures attached to the release.
+Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. No public signature is claimed for this package.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.5.tar.gz
+tar -xzf Nacreon_linux-0.23.6.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -223,7 +208,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.5/Nacreon_hiveos_custom-0.23.5.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.6/Nacreon_hiveos_custom-0.23.6.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -243,8 +228,14 @@ RU: Майнер работает самостоятельно. Настройк
 EN: Standalone miner. GPU tuning is applied only through explicit options. Component notices: COMPUTE_NOTICE.md.
 
 
-## Известное ограничение / Known issue
+## Примечания / Notes
 
-Добавлено исправление кратковременных просадок при смене заданий. Его работу на реальном риге предстоит проверить.
-A fix for brief drops when jobs change has been added. It still needs verification on a real rig.
+В 0.23.4 наблюдались временные паузы майнинга. Проверенные исправления и оставшиеся ограничения указаны в описании выпуска.
 
+Temporary mining pauses were observed in 0.23.4. Verified fixes and remaining limitations are listed in the release description.
+
+## Смешанные риги / Mixed GPU rigs
+
+Поддерживаемые RTX30, RTX40 и RTX50 могут работать на одном риге. Выбор карт выполняется автоматически; параметр `--devices` ограничивает список GPU. Статистика доступна в консоли и HiveOS.
+
+Supported RTX30, RTX40 and RTX50 cards can run together. Selection is automatic; use `--devices` to limit the GPUs. Statistics are available in the console and HiveOS.
