@@ -1,13 +1,13 @@
-# Nacreon 0.23.4
+# Nacreon 0.23.5
 
 Pearl (PRL / PearlHash) · NVIDIA RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
 
-Русский: Nacreon 0.23.4. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
-English: Nacreon 0.23.4. Nacreon fee is 0%; pool fees are separate.
+Русский: Nacreon 0.23.5. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
+English: Nacreon 0.23.5. Nacreon fee is 0%; pool fees are separate.
 Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
 For a homogeneous CUDA-visible rig the launcher selects SM86/SM89/SM120.
-For a mixed rig set NACREON_GPU_ARCH=sm86|sm89|sm120 and matching --devices.
-No architecture selection logic or console layout has changed.
+Supported GPU series can run together on one rig. Use --devices to limit the selected cards.
+Console layout remains unchanged.
 
 ## Поддерживаемые модели / Supported models
 
@@ -26,14 +26,14 @@ No architecture selection logic or console layout has changed.
 
 ## Русский
 
-Nacreon для RTX30/SM86, RTX40/SM89 и RTX50/SM120. Предыдущая версия проверена на этих трёх архитектурах. В 0.23.4 исправлены имя HiveOS-пакета и потеря истории периодов при временно неизвестной скорости GPU. Вычислительные модули сжаты и зашифрованы; после декодирования их исходные байты и SHA256 сохранены. Новый загрузчик и бинарники проходят CPU-проверки; это не новый физический GPU-тест.
+Nacreon для RTX30, RTX40 и RTX50. Исправлена проблема запуска майнера на ригах с видеокартами разных моделей и поколений. Поддерживаемые карты разных серий могут работать вместе на одном риге.
 
 ### Linux: установка и запуск
 
 Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверьте также приложенные к релизу Sigstore-подписи.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.4.tar.gz
+tar -xzf Nacreon_linux-0.23.5.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -67,6 +67,8 @@ cd nacreon
 | `--version` | Версия | `./nacreon --version` |
 
 Остановка — **Ctrl+C**. Дождитесь завершения перед повторным запуском.
+
+<a id="gpu-settings"></a>
 
 ### Linux: power limit, ядро и память
 
@@ -115,7 +117,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.4/Nacreon_hiveos_custom-0.23.4.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.5/Nacreon_hiveos_custom-0.23.5.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -132,14 +134,14 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 
 ## English
 
-Nacreon for RTX30/SM86, RTX40/SM89 and RTX50/SM120. The previous release was tested on these three architectures. Version 0.23.4 changes the version identifier; compute-image identity and CPU checks are required before release. This is not a new GPU test.
+Nacreon for RTX30, RTX40 and RTX50. Fixed startup on rigs using supported GPUs from different models and generations together.
 
 ### Linux: install and run
 
-Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. No public signature is claimed for this package.
+Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. Verify the Sigstore signatures attached to the release.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.4.tar.gz
+tar -xzf Nacreon_linux-0.23.5.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -221,7 +223,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.4/Nacreon_hiveos_custom-0.23.4.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.5/Nacreon_hiveos_custom-0.23.5.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -236,14 +238,13 @@ The screen refreshes every 5 seconds. Connection session shows the duration of t
 
 Before updating, stop the miner and keep the previous version and your settings. Extract the update into a separate directory. To roll back, stop it and start the previous version. Terms: `LICENSE.txt`; third-party notices: `licenses/`.
 
-RU: Запуск самостоятелен. Внешние compute-модули не являются собственными ядрами Nacreon; см. COMPUTE_NOTICE.md. Настройки GPU меняются только при явных параметрах.
+RU: Майнер работает самостоятельно. Настройки GPU меняются только при явных параметрах. Сведения об используемых компонентах: COMPUTE_NOTICE.md.
 
-EN: Standalone runtime. External compute modules are not Nacreon-authored kernels; see COMPUTE_NOTICE.md. GPU tuning is applied only through explicit options.
+EN: Standalone miner. GPU tuning is applied only through explicit options. Component notices: COMPUTE_NOTICE.md.
 
 
 ## Известное ограничение / Known issue
 
-На семи RTX5070 наблюдались временные GPU-простои с самостоятельным возобновлением. Причина пока не установлена; исправление истории статистики не означает устранения этого простоя. Наблюдение продолжается.
-Temporary compute pauses with automatic recovery were observed on seven RTX5070 cards. The cause remains unresolved; preserving period statistics does not fix the compute pause. Monitoring continues.
+Добавлено исправление кратковременных просадок при смене заданий. Его работу на реальном риге предстоит проверить.
+A fix for brief drops when jobs change has been added. It still needs verification on a real rig.
 
-Compute modules are compressed and encrypted at rest, with authenticated decoding and exact original SHA256 before loading. The embedded key does not guarantee secrecy against extraction from a running process.
