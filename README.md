@@ -1,24 +1,24 @@
-# Nacreon 0.23.7
+# Nacreon 0.23.8
 
-Pearl (PRL / PearlHash) · NVIDIA RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
+Pearl (PRL / PearlHash) · NVIDIA RTX20 / RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
 
-Русский: Nacreon 0.23.7. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
-English: Nacreon 0.23.7. Nacreon fee is 0%; pool fees are separate.
+Русский: Nacreon 0.23.8. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
+English: Nacreon 0.23.8. Nacreon fee is 0%; pool fees are separate.
 Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
-For a homogeneous CUDA-visible rig the launcher selects SM86/SM89/SM120.
+For a homogeneous CUDA-visible rig the launcher selects SM75/SM86/SM89/SM120.
 Mixed supported architectures are grouped automatically. Use --devices to limit GPUs; NACREON_GPU_ARCH selects a single architecture.
 Mixed architecture selection is fixed; console layout is unchanged.
 
 ## Русский
 
-Nacreon для RTX30, RTX40 и RTX50. В этой версии добавлена совместная работа поддерживаемых карт разных серий на одном риге. Инструкции запуска и настройки приведены ниже.
+Nacreon для RTX20, RTX30, RTX40 и RTX50. В0.23.8 добавлена поддержка RTX20 и исправлены ошибки подготовки и смены заданий на RTX30/40. Работа RTX20 проверена на RTX2060 и RTX2060SUPER. Инструкции запуска и настройки приведены ниже.
 
 ### Linux: установка и запуск
 
 Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверьте также приложенные к релизу Sigstore-подписи.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.7.tar.gz
+tar -xzf Nacreon_linux-0.23.8.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -102,7 +102,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.7/Nacreon_hiveos_custom-0.23.7.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.8/Nacreon_hiveos_custom-0.23.8.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -119,14 +119,14 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 
 ## English
 
-Nacreon for RTX30, RTX40 and RTX50. Supported cards from different series can run together on one rig. See the installation and tuning instructions below.
+Nacreon for RTX20, RTX30, RTX40 and RTX50. Version0.23.8 adds RTX20 support and fixes job preparation and switching on RTX30/40. RTX20 operation was checked on RTX2060 and RTX2060SUPER. See the installation and tuning instructions below.
 
 ### Linux: install and run
 
 Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. No public signature is claimed for this package.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.7.tar.gz
+tar -xzf Nacreon_linux-0.23.8.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -208,7 +208,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.7/Nacreon_hiveos_custom-0.23.7.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.8/Nacreon_hiveos_custom-0.23.8.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -236,12 +236,23 @@ Temporary mining pauses were observed in 0.23.4. Verified fixes and remaining li
 
 ## Смешанные риги / Mixed GPU rigs
 
-Поддерживаемые RTX30, RTX40 и RTX50 могут работать на одном риге. Выбор карт выполняется автоматически; параметр `--devices` ограничивает список GPU. Статистика доступна в консоли и HiveOS.
+Поддерживаемые RTX20, RTX30, RTX40 и RTX50 могут работать на одном риге. Выбор карт выполняется автоматически; параметр `--devices` ограничивает список GPU. Статистика доступна в консоли и HiveOS.
 
-Supported RTX30, RTX40 and RTX50 cards can run together. Selection is automatic; use `--devices` to limit the GPUs. Statistics are available in the console and HiveOS.
+Supported RTX20, RTX30, RTX40 and RTX50 cards can run together. Selection is automatic; use `--devices` to limit the GPUs. Statistics are available in the console and HiveOS.
 
 ## Журнал отклонённых шар / Rejected-share journal
 
 Включение и экспорт доступны из каталога установленного майнера: `./nacreon-log on`, `./nacreon-log status`, `./nacreon-log off`, `./nacreon-log export`. При запуске можно добавить `--reject-log`. Подробности: [диагностика отклонений](REJECT_LOGGING.md). Журнал сохраняет доступную очищенную причину; неизвестные сведения остаются неизвестными.
 
 Run these commands from the installed miner directory. See [rejected-share diagnostics](REJECT_LOGGING.md). Unavailable details remain unknown.
+
+
+## Поддержка проекта / Support the project
+
+Комиссия Nacreon — **0%**. Поддержать развитие проекта можно добровольным переводом PRL. Спасибо за помощь!
+
+Nacreon fee is **0%**. You can voluntarily support the project with a PRL donation. Thank you!
+
+```text
+prl1pvyz2r3st7jd9dp78pnd8784k46w49a3janwyn5zm5ajqw0xtfgqsgz455j
+```
