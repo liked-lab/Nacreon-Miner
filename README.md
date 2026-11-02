@@ -1,9 +1,9 @@
-# Nacreon 0.23.8
+# Nacreon 0.23.9
 
 Pearl (PRL / PearlHash) · NVIDIA RTX20 / RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
 
-Русский: Nacreon 0.23.8. Комиссия Nacreon — 0%; комиссия пула учитывается отдельно.
-English: Nacreon 0.23.8. Nacreon fee is 0%; pool fees are separate.
+Русский: Nacreon 0.23.9. В этой USER-only сборке комиссия Nacreon отключена. Отсутствие комиссии сторонних вычислительных модулей не заявляется; комиссия пула учитывается отдельно.
+English: Nacreon 0.23.9. The Nacreon fee is disabled in this USER-only build. No claim is made that third-party compute modules have no fee; pool fees are separate.
 Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
 For a homogeneous CUDA-visible rig the launcher selects SM75/SM86/SM89/SM120.
 Mixed supported architectures are grouped automatically. Use --devices to limit GPUs; NACREON_GPU_ARCH selects a single architecture.
@@ -11,14 +11,14 @@ Mixed architecture selection is fixed; console layout is unchanged.
 
 ## Русский
 
-Nacreon для RTX20, RTX30, RTX40 и RTX50. В0.23.8 добавлена поддержка RTX20 и исправлены ошибки подготовки и смены заданий на RTX30/40. Работа RTX20 проверена на RTX2060 и RTX2060SUPER. Инструкции запуска и настройки приведены ниже.
+Nacreon для RTX20, RTX30, RTX40 и RTX50. Поддерживаемые архитектуры могут работать совместно; физическая квалификация конкретных моделей и точного SHA приведена отдельно в описании выпуска. Инструкции запуска и настройки приведены ниже.
 
 ### Linux: установка и запуск
 
-Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверьте также приложенные к релизу Sigstore-подписи.
+Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверяйте подписи только при наличии опубликованных файлов подписей.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.8.tar.gz
+tar -xzf Nacreon_linux-0.23.9.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -102,7 +102,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.8/Nacreon_hiveos_custom-0.23.8.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.9/Nacreon_hiveos_custom-0.23.9.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -119,14 +119,14 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 
 ## English
 
-Nacreon for RTX20, RTX30, RTX40 and RTX50. Version0.23.8 adds RTX20 support and fixes job preparation and switching on RTX30/40. RTX20 operation was checked on RTX2060 and RTX2060SUPER. See the installation and tuning instructions below.
+Nacreon for RTX20, RTX30, RTX40 and RTX50. Supported architectures can run together; model-specific physical qualification and the exact qualified SHA are listed separately in the release description. See the installation and tuning instructions below.
 
 ### Linux: install and run
 
-Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. No public signature is claimed for this package.
+Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.8.tar.gz
+tar -xzf Nacreon_linux-0.23.9.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -208,7 +208,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.8/Nacreon_hiveos_custom-0.23.8.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.9/Nacreon_hiveos_custom-0.23.9.tar.gz (после публикации / after publication) |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -246,6 +246,16 @@ Supported RTX20, RTX30, RTX40 and RTX50 cards can run together. Selection is aut
 
 Run these commands from the installed miner directory. See [rejected-share diagnostics](REJECT_LOGGING.md). Unavailable details remain unknown.
 
+
+## Результаты и ограничения / Qualification and limits
+
+Точные результаты RTX20/30/40/50, CPU и валидной работы указываются отдельно для native/proof SHA. Выбор архитектуры и CPU-проверки не заменяют физический тест каждой модели. Рост заработка и отсутствие будущих отклонённых шар не обещаются. Обычный TH/s майнера и полезная скорость по принятой пулом работе — разные показатели.
+
+Аппаратная проверка рига с 12 GPU не выполнена: такого стенда нет. Существующие пути 1–8 GPU сохранены. Для 9–32 GPU в native-процессе действует ресурсный допуск конкретного семейства с проверкой доступной памяти и видимых cgroup-лимитов до CUDA. Требуемый резерв зависит от семейства, режима и числа устройств; это не измеренный RSS и не подтверждение hardware 12. При недостаточных или неизвестных ресурсах запуск более 8 GPU отклоняется.
+
+Exact RTX20/30/40/50, CPU and valid-work results are reported separately for each native/proof SHA. Architecture selection and CPU checks do not qualify every GPU model. Increased earnings and zero future rejects are not promised. Miner TH/s and useful pool-accepted work measure different things.
+
+A 12-GPU rig has not been physically tested because no such rig is available. Existing 1–8 GPU paths are retained. For 9–32 GPUs per native process, family-specific resource admission checks available RAM and visible cgroup limits before CUDA. Required reserves depend on family, mode and device count; they are not measured RSS or hardware 12 qualification. Insufficient or unknown resources refuse startup above 8 GPUs.
 
 ## Поддержка проекта / Support the project
 
