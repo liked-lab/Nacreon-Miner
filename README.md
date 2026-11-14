@@ -1,24 +1,21 @@
-# Nacreon 0.23.9
+# Nacreon 0.24.0
 
-Pearl (PRL / PearlHash) · NVIDIA RTX20 / RTX30 / RTX40 / RTX50 · Linux / HiveOS · USER-only
+Pearl (PRL / PearlHash) · NVIDIA RTX20 / RTX30 / RTX40 / RTX50 · Linux / HiveOS
 
-Русский: Nacreon 0.23.9. В этой USER-only сборке комиссия Nacreon отключена. Отсутствие комиссии сторонних вычислительных модулей не заявляется; комиссия пула учитывается отдельно.
-English: Nacreon 0.23.9. The Nacreon fee is disabled in this USER-only build. No claim is made that third-party compute modules have no fee; pool fees are separate.
+Комиссия Nacreon — **0,8%**. Комиссии пула и сторонних компонентов учитываются отдельно.
+Nacreon developer fee: **0.8%**. Pool and third-party component fees are separate.
 Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
-For a homogeneous CUDA-visible rig the launcher selects SM75/SM86/SM89/SM120.
-Mixed supported architectures are grouped automatically. Use --devices to limit GPUs; NACREON_GPU_ARCH selects a single architecture.
-Mixed architecture selection is fixed; console layout is unchanged.
 
 ## Русский
 
-Nacreon для RTX20, RTX30, RTX40 и RTX50. Поддерживаемые архитектуры могут работать совместно; физическая квалификация конкретных моделей и точного SHA приведена отдельно в описании выпуска. Инструкции запуска и настройки приведены ниже.
+Nacreon для RTX20, RTX30, RTX40 и RTX50. Инструкции запуска и настройки приведены ниже.
 
 ### Linux: установка и запуск
 
-Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверяйте подписи только при наличии опубликованных файлов подписей.
+Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверяйте подписи, если к выпуску приложены файлы подписей.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.9.tar.gz
+tar -xzf Nacreon_linux-0.24.0.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -31,7 +28,7 @@ cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET.rig01
 ```
 
-Используйте отдельный --worker либо суффикс .rig01. Вся выделяемая этой обвязкой работа относится к USER.
+Используйте отдельный --worker либо суффикс .rig01.
 
 ### Основные параметры
 
@@ -102,7 +99,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.9/Nacreon_hiveos_custom-0.23.9.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.24.0/Nacreon_hiveos_custom-0.24.0.tar.gz |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -113,20 +110,20 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 
 ### Экран и обновление
 
-Экран обновляется раз в 5 секунд. «Сеанс связи» — длительность текущего подключения к пулу. «Сбои» — подтверждённые события GPU/драйвера за запуск: `0` при полном наблюдении без событий, число при событиях, `—` при недостаточных данных. Отклонённые пулом шары учитываются отдельно. Это не диагностика исправности оборудования. Внизу — три последние принятые пользовательские шары и время ответа пула (ACK). Для сырых диагностических сообщений: `NACREON_RAW_CONSOLE=1 ./nacreon ...`.
+Экран обновляется раз в 5 секунд. «Сеанс связи» — длительность текущего подключения к пулу. Подтверждённые отказы пула учитываются отдельно от ошибок выполнения майнера. Внизу — три последние принятые пользовательские шары и время ответа пула (ACK). Для сырых диагностических сообщений: `NACREON_RAW_CONSOLE=1 ./nacreon ...`.
 
 Перед обновлением остановите майнер, сохраните прежнюю версию и свои настройки. Распакуйте новую версию в отдельный каталог. Для возврата остановите её и запустите прежнюю. Условия использования — `LICENSE.txt`, сторонние лицензии — `licenses/`.
 
 ## English
 
-Nacreon for RTX20, RTX30, RTX40 and RTX50. Supported architectures can run together; model-specific physical qualification and the exact qualified SHA are listed separately in the release description. See the installation and tuning instructions below.
+Nacreon for RTX20, RTX30, RTX40 and RTX50. See the installation and tuning instructions below.
 
 ### Linux: install and run
 
-Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS.
+Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. Verify signatures when signature files are published with the release.
 
 ```bash
-tar -xzf Nacreon_linux-0.23.9.tar.gz
+tar -xzf Nacreon_linux-0.24.0.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -139,7 +136,7 @@ For Kryptex, the combined form is also supported:
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET.rig01
 ```
 
-Use either --worker or a .rig01 suffix. This host allocates work only to USER.
+Use either --worker or a .rig01 suffix.
 
 ### Main options
 
@@ -208,7 +205,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.23.9/Nacreon_hiveos_custom-0.23.9.tar.gz (после публикации / after publication) |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.24.0/Nacreon_hiveos_custom-0.24.0.tar.gz |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -219,7 +216,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 
 ### Display and updates
 
-The screen refreshes every 5 seconds. Connection session shows the duration of the current pool connection. Faults count confirmed GPU/driver events during this run: `0` means complete observation with no events, a number means observed events, and `—` means insufficient data. Pool rejections are separate. This is not a hardware health diagnosis. The footer shows the last three accepted user shares and pool response latency (ACK). For raw diagnostic output: `NACREON_RAW_CONSOLE=1 ./nacreon ...`.
+The screen refreshes every 5 seconds. Connection session shows the duration of the current pool connection. The footer shows the last three accepted shares and the pool response time.
 
 Before updating, stop the miner and keep the previous version and your settings. Extract the update into a separate directory. To roll back, stop it and start the previous version. Terms: `LICENSE.txt`; third-party notices: `licenses/`.
 
@@ -232,7 +229,6 @@ EN: Standalone miner. GPU tuning is applied only through explicit options. Compo
 
 В 0.23.4 наблюдались временные паузы майнинга. Проверенные исправления и оставшиеся ограничения указаны в описании выпуска.
 
-Temporary mining pauses were observed in 0.23.4. Verified fixes and remaining limitations are listed in the release description.
 
 ## Смешанные риги / Mixed GPU rigs
 
@@ -247,22 +243,22 @@ Supported RTX20, RTX30, RTX40 and RTX50 cards can run together. Selection is aut
 Run these commands from the installed miner directory. See [rejected-share diagnostics](REJECT_LOGGING.md). Unavailable details remain unknown.
 
 
-## Результаты и ограничения / Qualification and limits
+### Поддержать проект / Support the project
 
-Точные результаты RTX20/30/40/50, CPU и валидной работы указываются отдельно для native/proof SHA. Выбор архитектуры и CPU-проверки не заменяют физический тест каждой модели. Рост заработка и отсутствие будущих отклонённых шар не обещаются. Обычный TH/s майнера и полезная скорость по принятой пулом работе — разные показатели.
-
-Аппаратная проверка рига с 12 GPU не выполнена: такого стенда нет. Существующие пути 1–8 GPU сохранены. Для 9–32 GPU в native-процессе действует ресурсный допуск конкретного семейства с проверкой доступной памяти и видимых cgroup-лимитов до CUDA. Требуемый резерв зависит от семейства, режима и числа устройств; это не измеренный RSS и не подтверждение hardware 12. При недостаточных или неизвестных ресурсах запуск более 8 GPU отклоняется.
-
-Exact RTX20/30/40/50, CPU and valid-work results are reported separately for each native/proof SHA. Architecture selection and CPU checks do not qualify every GPU model. Increased earnings and zero future rejects are not promised. Miner TH/s and useful pool-accepted work measure different things.
-
-A 12-GPU rig has not been physically tested because no such rig is available. Existing 1–8 GPU paths are retained. For 9–32 GPUs per native process, family-specific resource admission checks available RAM and visible cgroup limits before CUDA. Required reserves depend on family, mode and device count; they are not measured RSS or hardware 12 qualification. Insufficient or unknown resources refuse startup above 8 GPUs.
-
-## Поддержка проекта / Support the project
-
-Комиссия Nacreon — **0%**. Поддержать развитие проекта можно добровольным переводом PRL. Спасибо за помощь!
-
-Nacreon fee is **0%**. You can voluntarily support the project with a PRL donation. Thank you!
+Добровольный перевод PRL / Voluntary PRL donation:
 
 ```text
 prl1pvyz2r3st7jd9dp78pnd8784k46w49a3janwyn5zm5ajqw0xtfgqsgz455j
 ```
+
+Счёт для донатов не является настройкой маршрута комиссии. / The donation account is separate from the fee-route configuration.
+
+
+
+Температуры GPU/VRAM отображаются при наличии свежих данных клиента/HiveOS. Если данных нет, показано «—».
+
+GPU/VRAM temperatures are displayed when fresh client/HiveOS data is available. Missing data is shown as «—».
+
+
+
+**USDT · BSC (BEP20):** `0x48bb148cb49cb5527574ef26a663639802ed3c25`
