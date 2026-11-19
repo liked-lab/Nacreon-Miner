@@ -1,6 +1,6 @@
-# Nacreon 0.24.0
+# Nacreon 0.24.1
 
-Pearl (PRL / PearlHash) · NVIDIA RTX20 / RTX30 / RTX40 / RTX50 · Linux / HiveOS
+Pearl (PRL / PearlHash) · NVIDIA RTX20 / RTX30 / RTX40 / RTX50 / CMP · Linux / HiveOS
 
 Комиссия Nacreon — **0,8%**. Комиссии пула и сторонних компонентов учитываются отдельно.
 Nacreon developer fee: **0.8%**. Pool and third-party component fees are separate.
@@ -8,14 +8,14 @@ Python3.10+, Linux x86-64 and a compatible NVIDIA driver are required.
 
 ## Русский
 
-Nacreon для RTX20, RTX30, RTX40 и RTX50. Инструкции запуска и настройки приведены ниже.
+Nacreon для RTX20, RTX30, RTX40 и RTX50. Поддерживаются CMP 40HX, 50HX, 70HX и 90HX. Инструкции запуска и настройки приведены ниже.
 
 ### Linux: установка и запуск
 
 Нужны x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, совместимый драйвер NVIDIA выбранной карты, writable tmpfs /run либо /dev/shm; Python 3.10+ для консоли/Hive. Используйте приложенный Linux-архив и проверьте SHA256SUMS. Проверяйте подписи, если к выпуску приложены файлы подписей.
 
 ```bash
-tar -xzf Nacreon_linux-0.24.0.tar.gz
+tar -xzf Nacreon_linux-0.24.1.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -54,7 +54,9 @@ cd nacreon
 
 ### Linux: power limit, ядро и память
 
-Для изменения настроек GPU нужны права **root** (`sudo`) и поддержка драйвера/карты. Без параметров разгона майнер оставляет текущие настройки. Числа ниже — примеры синтаксиса, а не универсальный профиль RTX 30: подбирайте допустимые значения для своей карты.
+Для изменения настроек GPU нужны права **root** (`sudo`) и поддержка драйвера/карты. Выбранные настройки сохраняются, кроме автоматического профиля памяти PearlHash. Числа ниже — примеры синтаксиса, а не универсальный профиль RTX 30: подбирайте допустимые значения для своей карты.
+
+Для PearlHash на CMP 40HX, 50HX, 70HX и 90HX майнер автоматически выбирает 405 МГц без дополнительных параметров. Явная настройка памяти имеет приоритет. Автоматическое применение проверено на CMP 70HX с открытым модулем NVIDIA 595.91.07.
 
 Лимит 180 Вт на каждую выбранную карту:
 
@@ -99,7 +101,7 @@ sudo ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --work
 | Поле | Значение |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.24.0/Nacreon_hiveos_custom-0.24.0.tar.gz |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.24.1/Nacreon_hiveos_custom-0.24.1.tar.gz |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -123,7 +125,7 @@ Nacreon for RTX20, RTX30, RTX40 and RTX50. See the installation and tuning instr
 Requires x86-64 Linux, glibc 2.34+, libssl/libcrypto 3, libz.so.1, a compatible NVIDIA driver for the selected GPU, writable tmpfs /run or /dev/shm, and Python 3.10+ for console/Hive. Use the supplied Linux archive and verify SHA256SUMS. Verify signatures when signature files are published with the release.
 
 ```bash
-tar -xzf Nacreon_linux-0.24.0.tar.gz
+tar -xzf Nacreon_linux-0.24.1.tar.gz
 cd nacreon
 ./nacreon --pool prl.kryptex.network:7048 --wallet YOUR_PEARL_WALLET --worker rig01 --password x
 ```
@@ -160,7 +162,9 @@ Stop with **Ctrl+C** and wait for exit before starting again.
 
 ### Linux: power limit, core and memory settings
 
-GPU tuning requires **root** (`sudo`) and support from your GPU/driver. Without tuning options, existing GPU settings are preserved. The numbers below demonstrate syntax; they are not a universal RTX 30 profile. Choose values supported by your own cards.
+GPU tuning requires **root** (`sudo`) and support from your GPU/driver. Existing GPU settings are preserved except when the PearlHash automatic memory profile applies. The numbers below demonstrate tuning syntax. Choose values supported by your own cards.
+
+On CMP 40HX, 50HX, 70HX and 90HX, PearlHash automatically selects a 405 MHz memory clock with no extra options. Explicit memory settings take precedence. Automatic application was verified on CMP 70HX with the NVIDIA 595.91.07 open kernel module.
 
 Set a 180 W limit for each selected GPU:
 
@@ -205,7 +209,7 @@ Create a wallet with **your own address**, select it in the Flight Sheet and con
 | Field | Value |
 |---|---|
 | Miner name | `Nacreon_hiveos_custom` |
-| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.24.0/Nacreon_hiveos_custom-0.24.0.tar.gz |
+| Installation URL | https://github.com/liked-lab/Nacreon-Miner/releases/download/v0.24.1/Nacreon_hiveos_custom-0.24.1.tar.gz |
 | Algorithm | `pearlhash` |
 | Wallet / worker template | `%WAL%.%WORKER_NAME%` |
 | Pool URL | `prl.kryptex.network:7048` |
@@ -243,22 +247,6 @@ Supported RTX20, RTX30, RTX40 and RTX50 cards can run together. Selection is aut
 Run these commands from the installed miner directory. See [rejected-share diagnostics](REJECT_LOGGING.md). Unavailable details remain unknown.
 
 
-### Поддержать проект / Support the project
-
-Добровольный перевод PRL / Voluntary PRL donation:
-
-```text
-prl1pvyz2r3st7jd9dp78pnd8784k46w49a3janwyn5zm5ajqw0xtfgqsgz455j
-```
-
-Счёт для донатов не является настройкой маршрута комиссии. / The donation account is separate from the fee-route configuration.
-
-
-
 Температуры GPU/VRAM отображаются при наличии свежих данных клиента/HiveOS. Если данных нет, показано «—».
 
 GPU/VRAM temperatures are displayed when fresh client/HiveOS data is available. Missing data is shown as «—».
-
-
-
-**USDT · BSC (BEP20):** `0x48bb148cb49cb5527574ef26a663639802ed3c25`
